@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import headerLogo from './assets/prime-current/header-logo.png'
 import footerLogo from './assets/prime-current/footer-logo.png'
@@ -25,6 +26,74 @@ const subscriptions = [
   ['NBA', nba],
 ]
 
+const languages = [
+  'Bahasa Indonesia',
+  'Bahasa Melayu',
+  'Dansk',
+  'Deutsch',
+  'English',
+  'Español',
+  'Español Latinoamérica',
+  'Français',
+  'Italiano',
+  'Magyar',
+  'Nederlands',
+  'Norsk',
+  'Polski',
+  'Português (Brasil)',
+  'Português (Portugal)',
+  'Română',
+  'Suomi',
+  'Svenska',
+  'Türkçe',
+  'Wikang Filipino',
+  'Čeština',
+  'Ελληνικά',
+  'Русский',
+  'עברית',
+  'العربية',
+  'हिन्दी',
+  'தமிழ்',
+  'తెలుగు',
+  'ไทย',
+  '日本語',
+  '简体中文',
+  '繁體中文',
+  '한국어',
+]
+
+const categoryGroups = [
+  {
+    title: 'Genres',
+    items: [
+      'Action and adventure',
+      'Anime',
+      'Comedy',
+      'Documentary',
+      'Drama',
+      'Fantasy',
+      'Horror',
+      'Kids',
+      'Mystery and thrillers',
+      'Romance',
+      'Science fiction',
+      'Young adult',
+    ],
+  },
+  {
+    title: 'Featured collections',
+    items: [
+      'Made for you',
+      'New and upcoming',
+      'Home Premiere',
+      'Popular Bundles',
+      'Critically acclaimed',
+      'LGBTQIAP+',
+      'Black voices',
+    ],
+  },
+]
+
 function SearchIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -42,6 +111,14 @@ function GridIcon() {
   )
 }
 
+function MenuIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 7h16M4 12h16M4 17h16" />
+    </svg>
+  )
+}
+
 function UserIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -52,9 +129,35 @@ function UserIcon() {
 }
 
 function App() {
+  const [openMenu, setOpenMenu] = useState(null)
+  const [selectedLanguage, setSelectedLanguage] = useState('English')
+  const headerRef = useRef(null)
+
+  useEffect(() => {
+    const closeMenus = (event) => {
+      if (!headerRef.current?.contains(event.target)) setOpenMenu(null)
+    }
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setOpenMenu(null)
+    }
+
+    document.addEventListener('pointerdown', closeMenus)
+    document.addEventListener('keydown', closeOnEscape)
+    return () => {
+      document.removeEventListener('pointerdown', closeMenus)
+      document.removeEventListener('keydown', closeOnEscape)
+    }
+  }, [])
+
+  const toggleMenu = (menu) => {
+    setOpenMenu((current) => (current === menu ? null : menu))
+  }
+
+  const closeMenu = () => setOpenMenu(null)
+
   return (
     <div className="prime-home">
-      <header className="site-header">
+      <header className="site-header" ref={headerRef}>
         <a className="brand" href="#home" aria-label="Prime Video home">
           <img src={headerLogo} alt="Prime Video" />
         </a>
@@ -72,16 +175,102 @@ function App() {
           <button className="round-action" type="button" aria-label="Search">
             <SearchIcon />
           </button>
-          <button className="language" type="button" aria-label="Choose language">
-            EN <span>⌄</span>
-          </button>
-          <button className="round-action grid-action" type="button" aria-label="Apps">
+          <div className="menu-anchor language-anchor">
+            <button
+              className={`language ${openMenu === 'language' ? 'menu-open' : ''}`}
+              type="button"
+              aria-label={`Choose language. Current language: ${selectedLanguage}`}
+              aria-expanded={openMenu === 'language'}
+              aria-controls="language-menu"
+              onClick={() => toggleMenu('language')}
+            >
+              EN <span className="caret">⌄</span>
+            </button>
+            {openMenu === 'language' && (
+              <div className="language-menu dropdown-panel" id="language-menu">
+                <p>Choose a language</p>
+                <div className="language-grid">
+                  {languages.map((language) => (
+                    <button
+                      className={selectedLanguage === language ? 'selected' : ''}
+                      type="button"
+                      key={language}
+                      onClick={() => {
+                        setSelectedLanguage(language)
+                        closeMenu()
+                      }}
+                    >
+                      {language}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+          <a className="round-action grid-action" href="#categories" aria-label="Categories">
             <GridIcon />
-          </button>
+          </a>
           <a className="profile" href="#sign-in" aria-label="Profile and account">
             <UserIcon />
           </a>
           <a className="join-prime" href="#join">Join Prime</a>
+          <div className="menu-anchor mobile-menu-anchor">
+            <button
+              className={`mobile-menu-button ${openMenu === 'mobile' ? 'menu-open' : ''}`}
+              type="button"
+              aria-label="Menu"
+              aria-expanded={openMenu === 'mobile' || openMenu === 'mobile-language'}
+              aria-controls="mobile-navigation"
+              onClick={() => toggleMenu('mobile')}
+            >
+              <MenuIcon />
+              <span>Menu</span>
+              <span className="caret">⌄</span>
+            </button>
+            {(openMenu === 'mobile' || openMenu === 'mobile-language') && (
+              <nav className="mobile-nav dropdown-panel" id="mobile-navigation" aria-label="Mobile navigation">
+                {openMenu === 'mobile' ? (
+                  <>
+                    <p>Browse</p>
+                    <a href="#home" onClick={closeMenu}>Home</a>
+                    <a href="#movies" onClick={closeMenu}>Movies</a>
+                    <a href="#tv-shows" onClick={closeMenu}>TV shows</a>
+                    <a href="#categories" onClick={closeMenu}>Categories</a>
+                    <a href="#join" onClick={closeMenu}>Join Prime</a>
+                    <div className="mobile-subscriptions">
+                      <span>Subscriptions</span>
+                      <a href="#subscriptions" onClick={closeMenu}>Channels <strong>Browse all ›</strong></a>
+                    </div>
+                    <button type="button" onClick={() => setOpenMenu('mobile-language')}>
+                      Language <strong>EN ›</strong>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button className="mobile-back" type="button" onClick={() => setOpenMenu('mobile')}>
+                      ‹ Back <strong>EN</strong>
+                    </button>
+                    <p>Choose a language</p>
+                    <div className="mobile-language-list">
+                      {languages.map((language) => (
+                        <button
+                          className={selectedLanguage === language ? 'selected' : ''}
+                          type="button"
+                          key={language}
+                          onClick={() => {
+                            setSelectedLanguage(language)
+                            closeMenu()
+                          }}
+                        >
+                          {language}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </nav>
+            )}
+          </div>
         </div>
       </header>
 
@@ -113,6 +302,22 @@ function App() {
               <a href="#channel" key={name} aria-label={name}>
                 <img src={image} alt={name} />
               </a>
+            ))}
+          </div>
+        </section>
+
+        <section className="categories-section" id="categories">
+          <h2>Categories</h2>
+          <div className="category-groups">
+            {categoryGroups.map((group) => (
+              <div className="category-group" key={group.title}>
+                <h3>{group.title}</h3>
+                <div className="category-grid">
+                  {group.items.map((category) => (
+                    <a href="#category" key={category}>{category}</a>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </section>
