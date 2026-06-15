@@ -131,6 +131,8 @@ function UserIcon() {
 function App() {
   const [openMenu, setOpenMenu] = useState(null)
   const [selectedLanguage, setSelectedLanguage] = useState('English')
+  const [page, setPage] = useState(() => (window.location.hash === '#signin' ? 'signin' : 'home'))
+  const [signInNotice, setSignInNotice] = useState('')
   const headerRef = useRef(null)
 
   useEffect(() => {
@@ -140,12 +142,15 @@ function App() {
     const closeOnEscape = (event) => {
       if (event.key === 'Escape') setOpenMenu(null)
     }
+    const syncPage = () => setPage(window.location.hash === '#signin' ? 'signin' : 'home')
 
     document.addEventListener('pointerdown', closeMenus)
     document.addEventListener('keydown', closeOnEscape)
+    window.addEventListener('hashchange', syncPage)
     return () => {
       document.removeEventListener('pointerdown', closeMenus)
       document.removeEventListener('keydown', closeOnEscape)
+      window.removeEventListener('hashchange', syncPage)
     }
   }, [])
 
@@ -155,10 +160,71 @@ function App() {
 
   const closeMenu = () => setOpenMenu(null)
 
+  const navigateToSignIn = () => {
+    closeMenu()
+    window.location.hash = 'signin'
+    setPage('signin')
+    window.scrollTo({ top: 0, behavior: 'auto' })
+  }
+
+  const navigateHome = () => {
+    window.location.hash = 'home'
+    setPage('home')
+    window.scrollTo({ top: 0, behavior: 'auto' })
+  }
+
+  if (page === 'signin') {
+    return (
+      <main className="amazon-signin-page">
+        <button className="amazon-wordmark" type="button" onClick={navigateHome} aria-label="Return to Prime Video">
+          <span>amazon</span><i />
+        </button>
+
+        <section className="signin-card" aria-labelledby="signin-title">
+          <h1 id="signin-title">Sign in</h1>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault()
+              setSignInNotice('Demo only: no sign-in information was submitted or stored.')
+            }}
+          >
+            <label htmlFor="signin-email">Email or mobile phone number</label>
+            <input id="signin-email" type="text" autoComplete="off" required />
+            <button className="amazon-continue" type="submit">Continue</button>
+          </form>
+          {signInNotice && <p className="signin-notice" role="status">{signInNotice}</p>}
+          <p className="signin-terms">
+            By continuing, you agree to Amazon&apos;s <a href="#conditions">Conditions of Use</a> and <a href="#privacy">Privacy Notice</a>.
+          </p>
+          <details className="signin-help">
+            <summary>Need help?</summary>
+            <a href="#forgot-password">Forgot your password?</a>
+            <a href="#other-issues">Other issues with Sign-In</a>
+          </details>
+          <div className="business-divider" />
+          <h2>Buying for work?</h2>
+          <a href="#business">Shop on Amazon Business</a>
+        </section>
+
+        <div className="new-account-divider"><span>New to Amazon?</span></div>
+        <button className="create-account" type="button">Create your Amazon account</button>
+
+        <footer className="signin-footer">
+          <nav>
+            <a href="#conditions">Conditions of Use</a>
+            <a href="#privacy">Privacy Notice</a>
+            <a href="#help">Help</a>
+          </nav>
+          <p>© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+        </footer>
+      </main>
+    )
+  }
+
   return (
     <div className="prime-home">
       <header className="site-header" ref={headerRef}>
-        <a className="brand" href="#home" aria-label="Prime Video home">
+          <a className="brand" href="#home" aria-label="Prime Video home" onClick={closeMenu}>
           <img src={headerLogo} alt="Prime Video" />
         </a>
 
@@ -207,19 +273,45 @@ function App() {
               </div>
             )}
           </div>
-          <a className="round-action grid-action" href="#categories" aria-label="Categories">
-            <GridIcon />
-          </a>
-          <a className="profile" href="#sign-in" aria-label="Profile and account">
+          <div className="menu-anchor categories-anchor">
+            <button
+              className={`round-action grid-action ${openMenu === 'categories' ? 'menu-open' : ''}`}
+              type="button"
+              aria-label="Categories"
+              aria-expanded={openMenu === 'categories'}
+              aria-controls="categories-menu"
+              onClick={() => toggleMenu('categories')}
+            >
+              <GridIcon />
+            </button>
+            {openMenu === 'categories' && (
+              <div className="categories-menu dropdown-panel" id="categories-menu">
+                <h2>Categories</h2>
+                <div className="category-menu-groups">
+                  {categoryGroups.map((group) => (
+                    <section key={group.title}>
+                      <h3>{group.title}</h3>
+                      <div>
+                        {group.items.map((category) => (
+                          <a href="#category" key={category} onClick={closeMenu}>{category}</a>
+                        ))}
+                      </div>
+                    </section>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+          <button className="profile" type="button" aria-label="Profile and account" onClick={navigateToSignIn}>
             <UserIcon />
-          </a>
-          <a className="join-prime" href="#join">Join Prime</a>
+          </button>
+          <button className="join-prime" type="button" onClick={navigateToSignIn}>Join Prime</button>
           <div className="menu-anchor mobile-menu-anchor">
             <button
-              className={`mobile-menu-button ${openMenu === 'mobile' ? 'menu-open' : ''}`}
+              className={`mobile-menu-button ${openMenu?.startsWith('mobile') ? 'menu-open' : ''}`}
               type="button"
               aria-label="Menu"
-              aria-expanded={openMenu === 'mobile' || openMenu === 'mobile-language'}
+              aria-expanded={openMenu === 'mobile' || openMenu === 'mobile-language' || openMenu === 'mobile-categories'}
               aria-controls="mobile-navigation"
               onClick={() => toggleMenu('mobile')}
             >
@@ -227,7 +319,7 @@ function App() {
               <span>Menu</span>
               <span className="caret">⌄</span>
             </button>
-            {(openMenu === 'mobile' || openMenu === 'mobile-language') && (
+            {(openMenu === 'mobile' || openMenu === 'mobile-language' || openMenu === 'mobile-categories') && (
               <nav className="mobile-nav dropdown-panel" id="mobile-navigation" aria-label="Mobile navigation">
                 {openMenu === 'mobile' ? (
                   <>
@@ -235,8 +327,8 @@ function App() {
                     <a href="#home" onClick={closeMenu}>Home</a>
                     <a href="#movies" onClick={closeMenu}>Movies</a>
                     <a href="#tv-shows" onClick={closeMenu}>TV shows</a>
-                    <a href="#categories" onClick={closeMenu}>Categories</a>
-                    <a href="#join" onClick={closeMenu}>Join Prime</a>
+                    <button type="button" onClick={() => setOpenMenu('mobile-categories')}>Categories <strong>›</strong></button>
+                    <button type="button" onClick={navigateToSignIn}>Join Prime</button>
                     <div className="mobile-subscriptions">
                       <span>Subscriptions</span>
                       <a href="#subscriptions" onClick={closeMenu}>Channels <strong>Browse all ›</strong></a>
@@ -245,7 +337,7 @@ function App() {
                       Language <strong>EN ›</strong>
                     </button>
                   </>
-                ) : (
+                ) : openMenu === 'mobile-language' ? (
                   <>
                     <button className="mobile-back" type="button" onClick={() => setOpenMenu('mobile')}>
                       ‹ Back <strong>EN</strong>
@@ -267,6 +359,22 @@ function App() {
                       ))}
                     </div>
                   </>
+                ) : (
+                  <>
+                    <button className="mobile-back" type="button" onClick={() => setOpenMenu('mobile')}>
+                      ‹ Back <strong>Categories</strong>
+                    </button>
+                    <div className="mobile-category-groups">
+                      {categoryGroups.map((group) => (
+                        <section key={group.title}>
+                          <p>{group.title}</p>
+                          {group.items.map((category) => (
+                            <a href="#category" key={category} onClick={closeMenu}>{category}</a>
+                          ))}
+                        </section>
+                      ))}
+                    </div>
+                  </>
                 )}
               </nav>
             )}
@@ -279,7 +387,7 @@ function App() {
           <div className="magnet-copy">
             <h1>Welcome to Prime Video</h1>
             <p>Join Prime to watch the latest movies, TV shows and award-winning Amazon Originals</p>
-            <a className="primary-button" href="#sign-in">Sign in to join Prime</a>
+            <button className="primary-button" type="button" onClick={navigateToSignIn}>Sign in to join Prime</button>
           </div>
         </section>
 
@@ -306,21 +414,6 @@ function App() {
           </div>
         </section>
 
-        <section className="categories-section" id="categories">
-          <h2>Categories</h2>
-          <div className="category-groups">
-            {categoryGroups.map((group) => (
-              <div className="category-group" key={group.title}>
-                <h3>{group.title}</h3>
-                <div className="category-grid">
-                  {group.items.map((category) => (
-                    <a href="#category" key={category}>{category}</a>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
       </main>
 
       <footer className="site-footer" id="join">
