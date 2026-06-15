@@ -1,5 +1,7 @@
 .prime-home {
+  width: 100%;
   min-height: 100vh;
+  overflow: hidden;
   color: #fff;
   background: #00050d;
   font-family: Arial, Helvetica, sans-serif;
@@ -287,8 +289,9 @@ p {
 }
 
 @media (max-width: 1180px) {
-  .site-header { padding-inline: 24px; }
-  .desktop-nav a { padding-inline: 10px; }
+  .site-header { padding-inline: clamp(18px, 2vw, 24px); }
+  .brand { margin-right: 18px; }
+  .desktop-nav a { padding-inline: 9px; }
   .desktop-nav a:nth-of-type(4),
   .language,
   .grid-action { display: none; }
@@ -297,50 +300,145 @@ p {
 
 @media (max-width: 900px) {
   .desktop-nav { display: none; }
+  .site-header { min-height: 68px; }
+  .magnet {
+    min-height: 620px;
+    padding-inline: 36px;
+  }
+  .magnet-copy { width: min(520px, 53vw); }
   .subscriptions-section {
     grid-template-columns: 1fr;
+    gap: 42px;
+    padding-block: 64px;
     text-align: center;
   }
   .subscriptions-copy { max-width: 680px; margin: 0 auto; }
+  .subscriptions-grid { width: min(100%, 720px); margin: 0 auto; }
 }
 
 @media (max-width: 650px) {
   .site-header {
-    min-height: 60px;
-    padding: 6px 12px 6px 16px;
+    min-height: calc(60px + env(safe-area-inset-top));
+    padding: calc(6px + env(safe-area-inset-top)) 12px 6px 16px;
   }
   .brand { margin-right: auto; }
-  .brand img { width: 105px; }
-  .round-action { width: 38px; height: 38px; }
+  .brand img { width: clamp(92px, 28vw, 105px); }
+  .nav-actions { min-width: 0; gap: 2px; }
+  .round-action { width: 40px; height: 40px; }
+  .round-action svg, .profile svg { width: 21px; }
   .grid-action { display: none; }
-  .profile { width: 38px; height: 38px; margin: 0 4px; }
+  .profile { width: 40px; height: 40px; margin: 0 3px; }
   .join-prime { min-height: 40px; padding-inline: 12px; font-size: 13px; }
   .magnet {
     align-items: flex-end;
-    min-height: 675px;
-    padding: 340px 20px 48px;
+    min-height: max(620px, 100svh);
+    padding: clamp(315px, 55vh, 430px) 20px max(42px, env(safe-area-inset-bottom));
     background-image:
-      linear-gradient(0deg, #000 7%, rgba(0, 0, 0, .94) 38%, rgba(0, 0, 0, .08) 71%),
+      linear-gradient(0deg, #000 5%, rgba(0, 0, 0, .96) 36%, rgba(0, 0, 0, .14) 67%, transparent 78%),
       var(--desktop-image);
-    background-position: center, 72% top;
-    background-size: cover, auto 68%;
+    background-position: center, 71% top;
+    background-size: cover, auto clamp(390px, 62vh, 520px);
   }
   .rentals {
-    min-height: 650px;
+    min-height: max(600px, 92svh);
     background-position: center, 74% top;
   }
   .magnet-copy { width: 100%; text-align: center; }
-  .magnet h1, .magnet h2, .subscriptions-copy h2 { font-size: 38px; }
-  .magnet-copy p { margin: 20px 0 28px; font-size: 18px; }
-  .primary-button { width: 100%; min-width: 0; min-height: 56px; }
-  .subscriptions-section { min-height: auto; padding: 54px 18px; }
-  .subscriptions-copy p { font-size: 18px; }
+  .magnet h1,
+  .magnet h2,
+  .subscriptions-copy h2 {
+    font-size: clamp(32px, 9.5vw, 40px);
+    line-height: 1.1;
+  }
+  .magnet-copy p {
+    margin: 18px auto 26px;
+    max-width: 520px;
+    font-size: clamp(17px, 4.6vw, 19px);
+    line-height: 1.4;
+  }
+  .primary-button {
+    width: min(100%, 420px);
+    min-width: 0;
+    min-height: 56px;
+    padding-inline: 18px;
+  }
+  .subscriptions-section {
+    min-height: auto;
+    gap: 34px;
+    padding: 52px 16px;
+  }
+  .subscriptions-copy p {
+    margin-top: 20px;
+    font-size: clamp(17px, 4.5vw, 19px);
+  }
   .subscriptions-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .subscriptions-grid a { border-radius: 9px; }
+  .site-footer {
+    gap: 18px;
+    padding: 34px 18px calc(38px + env(safe-area-inset-bottom));
+  }
   .site-footer nav { gap: 12px 18px; }
+  .site-footer a { font-size: 14px; }
 }
 
 @media (max-width: 420px) {
   .round-action { display: none; }
+  .site-header { padding-inline: 12px 10px; }
+  .brand img { width: 92px; }
+  .profile { width: 38px; height: 38px; margin-inline: 2px; }
+  .join-prime { padding-inline: 10px; font-size: 12px; }
+  .magnet {
+    padding-inline: 16px;
+    background-position: center, 70% top;
+  }
+  .rentals { background-position: center, 73% top; }
   .subscriptions-grid { gap: 6px; }
   .subscriptions-grid a { border-radius: 7px; }
+  .site-footer nav {
+    flex-direction: column;
+    gap: 11px;
+  }
+}
+
+@media (max-width: 350px) {
+  .brand img { width: 84px; }
+  .profile { display: none; }
+  .join-prime { min-height: 38px; }
+  .magnet h1,
+  .magnet h2,
+  .subscriptions-copy h2 { font-size: 30px; }
+  .subscriptions-section { padding-inline: 12px; }
+}
+
+@media (max-height: 560px) and (orientation: landscape) {
+  .site-header {
+    min-height: 54px;
+    padding-block: 4px;
+  }
+  .brand img { width: 92px; }
+  .profile,
+  .round-action { width: 38px; height: 38px; }
+  .join-prime { min-height: 38px; }
+  .magnet,
+  .rentals {
+    min-height: 540px;
+    padding: 90px 30px 38px;
+    align-items: center;
+    background-image:
+      linear-gradient(90deg, #000 0%, rgba(0, 0, 0, .9) 42%, rgba(0, 0, 0, .1) 75%),
+      var(--desktop-image);
+    background-position: center, right center;
+    background-size: cover, cover;
+  }
+  .magnet-copy {
+    width: min(480px, 55vw);
+    text-align: left;
+  }
+  .magnet h1,
+  .magnet h2 { font-size: clamp(30px, 5vw, 42px); }
+  .magnet-copy p {
+    margin: 14px 0 20px;
+    font-size: 16px;
+  }
+  .primary-button { width: auto; min-width: 220px; min-height: 50px; }
 }
