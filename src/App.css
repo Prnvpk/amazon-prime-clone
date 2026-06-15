@@ -1,0 +1,346 @@
+.prime-home {
+  min-height: 100vh;
+  color: #fff;
+  background: #00050d;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+.site-header {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 72px;
+  padding: 8px 42px;
+  background: #00050d;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, .32);
+}
+
+.brand {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  margin-right: 28px;
+}
+
+.brand img {
+  display: block;
+  width: 116px;
+  height: auto;
+}
+
+.desktop-nav,
+.nav-actions,
+.site-footer nav {
+  display: flex;
+  align-items: center;
+}
+
+.desktop-nav {
+  gap: 4px;
+}
+
+.desktop-nav a,
+.language {
+  padding: 12px 14px;
+  color: #d6dce4;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  transition: color .14s ease, background .14s ease;
+}
+
+.desktop-nav a:hover,
+.desktop-nav a.active,
+.language:hover,
+.round-action:hover {
+  color: #00050d;
+  background: #fff;
+}
+
+.nav-divider {
+  width: 1px;
+  height: 28px;
+  margin: 0 8px;
+  background: #5f6975;
+}
+
+.nav-actions {
+  gap: 4px;
+  margin-left: auto;
+}
+
+.round-action,
+.profile {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  place-items: center;
+  padding: 0;
+  color: #d6dce4;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  transition: color .14s ease, background .14s ease;
+}
+
+.round-action svg,
+.profile svg {
+  width: 23px;
+}
+
+.round-action svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.grid-action svg {
+  fill: currentColor;
+  stroke: none;
+}
+
+.profile {
+  margin: 0 7px;
+  color: #fff;
+  background: #0f79af;
+  box-shadow: inset 0 0 0 3px #84c8e9;
+}
+
+.profile svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+}
+
+.join-prime,
+.primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  background: #1a98ff;
+  border-radius: 8px;
+  transition: background .15s ease, transform .15s ease;
+}
+
+.join-prime {
+  min-height: 48px;
+  padding: 0 20px;
+  white-space: nowrap;
+}
+
+.primary-button {
+  min-width: 250px;
+  min-height: 62px;
+  padding: 0 28px;
+  color: #00050d;
+  background: #fff;
+  font-size: 18px;
+}
+
+.join-prime:hover {
+  background: #48adff;
+}
+
+.primary-button:hover {
+  background: #e8f5fc;
+  transform: scale(1.025);
+}
+
+.magnet {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 675px;
+  padding: 110px clamp(32px, 5vw, 80px) 60px;
+  overflow: hidden;
+  background-color: #000;
+  background-image:
+    linear-gradient(90deg, #000 0%, #000 30%, rgba(0, 0, 0, .88) 43%, rgba(0, 0, 0, .06) 68%),
+    linear-gradient(0deg, rgba(0, 5, 13, .35), transparent 24%),
+    var(--desktop-image);
+  background-repeat: no-repeat;
+  background-position: center, center, right center;
+  background-size: cover, cover, cover;
+}
+
+.rentals {
+  min-height: 610px;
+  padding-top: 70px;
+}
+
+.magnet-copy {
+  position: relative;
+  z-index: 2;
+  width: min(600px, 45vw);
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+.magnet h1,
+.magnet h2,
+.subscriptions-copy h2 {
+  font-size: clamp(40px, 4vw, 58px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -.025em;
+}
+
+.magnet-copy p {
+  margin: 26px 0 38px;
+  font-size: clamp(18px, 1.7vw, 24px);
+  line-height: 1.42;
+}
+
+.subscriptions-section {
+  display: grid;
+  grid-template-columns: minmax(0, .92fr) minmax(560px, 1.08fr);
+  align-items: center;
+  gap: clamp(50px, 7vw, 112px);
+  min-height: 680px;
+  padding: 72px clamp(32px, 5vw, 80px);
+  color: #00050d;
+  background: #fff;
+}
+
+.subscriptions-copy p {
+  margin-top: 28px;
+  font-size: clamp(18px, 1.55vw, 23px);
+  line-height: 1.45;
+}
+
+.subscriptions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.subscriptions-grid a {
+  display: block;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 7px 18px rgba(0, 0, 0, .26);
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+
+.subscriptions-grid a:hover {
+  z-index: 1;
+  transform: scale(1.035);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, .34);
+}
+
+.subscriptions-grid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 426 / 294;
+  object-fit: cover;
+}
+
+.site-footer {
+  display: grid;
+  justify-items: center;
+  gap: 15px;
+  padding: 32px 20px 42px;
+  color: #8192a5;
+  background: #222831;
+}
+
+.site-footer > img {
+  width: 132px;
+  height: auto;
+}
+
+.site-footer nav {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.site-footer a {
+  color: #79c9f3;
+  text-decoration: none;
+}
+
+.site-footer p {
+  font-size: 14px;
+  text-align: center;
+}
+
+@media (max-width: 1180px) {
+  .site-header { padding-inline: 24px; }
+  .desktop-nav a { padding-inline: 10px; }
+  .desktop-nav a:nth-of-type(4),
+  .language,
+  .grid-action { display: none; }
+  .subscriptions-section { grid-template-columns: 1fr 1.15fr; gap: 44px; }
+}
+
+@media (max-width: 900px) {
+  .desktop-nav { display: none; }
+  .subscriptions-section {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .subscriptions-copy { max-width: 680px; margin: 0 auto; }
+}
+
+@media (max-width: 650px) {
+  .site-header {
+    min-height: 60px;
+    padding: 6px 12px 6px 16px;
+  }
+  .brand { margin-right: auto; }
+  .brand img { width: 105px; }
+  .round-action { width: 38px; height: 38px; }
+  .grid-action { display: none; }
+  .profile { width: 38px; height: 38px; margin: 0 4px; }
+  .join-prime { min-height: 40px; padding-inline: 12px; font-size: 13px; }
+  .magnet {
+    align-items: flex-end;
+    min-height: 675px;
+    padding: 340px 20px 48px;
+    background-image:
+      linear-gradient(0deg, #000 7%, rgba(0, 0, 0, .94) 38%, rgba(0, 0, 0, .08) 71%),
+      var(--desktop-image);
+    background-position: center, 72% top;
+    background-size: cover, auto 68%;
+  }
+  .rentals {
+    min-height: 650px;
+    background-position: center, 74% top;
+  }
+  .magnet-copy { width: 100%; text-align: center; }
+  .magnet h1, .magnet h2, .subscriptions-copy h2 { font-size: 38px; }
+  .magnet-copy p { margin: 20px 0 28px; font-size: 18px; }
+  .primary-button { width: 100%; min-width: 0; min-height: 56px; }
+  .subscriptions-section { min-height: auto; padding: 54px 18px; }
+  .subscriptions-copy p { font-size: 18px; }
+  .subscriptions-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .site-footer nav { gap: 12px 18px; }
+}
+
+@media (max-width: 420px) {
+  .round-action { display: none; }
+  .subscriptions-grid { gap: 6px; }
+  .subscriptions-grid a { border-radius: 7px; }
+}
